@@ -11,14 +11,21 @@
 				width: 50%;
 				float: left;
 			}
+			.videos {
+				position: absolute;
+				width: 100%;
+				top: 50%;
+				transform: translateY(-50%);
+			}
 		</style>
 		
 	</head>
 	<body>
 		
-		<!-- <canvas></canvas> -->
-		<video></video>
-		<video></video>
+		<div class="videos">
+			<video></video>
+			<video></video>
+		</div>
 		<script>
 			document.body.addEventListener('click', function(){
 				var elem = document.body;
@@ -35,8 +42,6 @@
 
 			var video1 = document.querySelectorAll('video')[0];
 			var video2 = document.querySelectorAll('video')[1];
-			// var canvas = document.querySelector('canvas');
-			// var context = canvas.getContext('2d');
 
 			var setupWebcam = function(){
 				navigator.getUserMedia = 
@@ -55,16 +60,10 @@
 						video1.play();
 						video2.src = video1.src;
 						video2.play();
-						// draw();
 					},
 					function(error) { /* do something */ }
 				);
 			};
-
-			// var draw = function(){
-
-			// 	requestAnimationFrame(draw);
-			// };
 
 			setupWebcam();
 
