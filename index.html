@@ -1,0 +1,60 @@
+<html>
+	<head>
+
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				background: black;
+			}
+			video {
+				width: 50%;
+				float: left;
+			}
+		</style>
+		
+	</head>
+	<body>
+		
+		<!-- <canvas></canvas> -->
+		<video></video>
+		<video></video>
+		<script>
+			document.body.addEventListener('click', function(){
+
+			});
+
+			var video1 = document.querySelectorAll('video')[0];
+			var video2 = document.querySelectorAll('video')[1];
+			// var canvas = document.querySelector('canvas');
+			// var context = canvas.getContext('2d');
+
+			var setupWebcam = function(){
+
+				navigator.webkitGetUserMedia(
+					{
+						video:true,
+						audio:false
+					},        
+					function(stream) {
+						var url = window.URL || window.webkitURL;
+						video1.src = url ? url.createObjectURL(stream) : stream;
+						video1.play();
+						video2.src = video1.src;
+						video2.play();
+						// draw();
+					},
+					function(error) { /* do something */ }
+				);
+			};
+
+			// var draw = function(){
+
+			// 	requestAnimationFrame(draw);
+			// };
+
+			setupWebcam();
+
+		</script>
+	</body>
+</html>
