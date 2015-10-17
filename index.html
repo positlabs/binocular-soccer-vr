@@ -30,8 +30,12 @@
 			// var context = canvas.getContext('2d');
 
 			var setupWebcam = function(){
+				navigator.getUserMedia = 
+					navigator.webkitGetUserMedia || 
+					navigator.mozGetUserMedia || 
+					navigator.getUserMedia;
 
-				navigator.webkitGetUserMedia(
+				navigator.getUserMedia (
 					{
 						video:true,
 						audio:false
