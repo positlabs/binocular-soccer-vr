@@ -3,30 +3,192 @@
 
 		<style>
 			body {
-				margin: 0;
-				padding: 0;
+				position: absolute;
+				top: 0; left: 0;
+				width: 100%; height: 100%;
+				margin: 0; padding: 0;
 				background: black;
 			}
-			video {
-				width: 50%;
-				float: left;
-			}
-			.videos {
+			
+			/* 
+				mask for video elements 
+			*/
+			.eye {
 				position: absolute;
-				width: 100%;
+				left: 0;
+				width: 50%;
+				height: 100%;
 				top: 50%;
+				-moz-transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
 				transform: translateY(-50%);
+				overflow: hidden;
+				/*background: red;*/
 			}
+
+			.eye:nth-child(2) {
+				left: 50%;
+			}
+
+			video {
+				position: absolute;
+				top: 50%; left: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+			#controls {
+				position: absolute;
+				left: 10px; top: 10px;
+				z-index: 1;
+				opacity: 0;
+				transition: all 1s;
+			}
+
+			#controls input {
+				display: block;
+				margin-bottom: 10px;
+			}
+
+			#controls div {
+				position: relative;
+			}
+				
+			#controls label {
+				/*content: 'asdf';*/
+				position: absolute;
+				left: 100%; top: 0;
+				width: 200px;
+				margin-left: 10px;
+				color: white;
+				text-shadow: 0 0 3px black;
+			}
+
+
+
 		</style>
 		
 	</head>
 	<body>
-		
-		<div class="videos">
-			<video></video>
+
+		<div id='controls'>
+			<div>
+				<input id='zoom' type="range" min='.1' max='5' value='2' step='0.01'>
+				<label for="zoom"><span>zoom: </span><span class='value'></span></label>
+			</div>
+			<div>
+				<input id='ipd' type="range" min='-100' max='100' value='0' step='1'>
+				<label for="ipd"><span>IPD: </span><span class='value'></span></label>
+			</div>
+
+		</div>
+	
+		<div class='eye'>
 			<video></video>
 		</div>
+		<div class='eye'>
+			<video></video>
+		</div>
+
 		<script>
+
+			if(localStorage.getItem('zoom')){
+				document.querySelector('#zoom').value = parseFloat(localStorage.getItem('zoom'));
+			}
+			if(localStorage.getItem('ipd')){
+				document.querySelector('#ipd').value = parseFloat(localStorage.getItem('ipd'));
+			}
+
+			var video1 = document.querySelectorAll('video')[0];
+			var video2 = document.querySelectorAll('video')[1];
+			var zoom = document.querySelector('#zoom').value;
+
+			var setupWebcam = function(){
+				navigator.getUserMedia = 
+					navigator.webkitGetUserMedia || 
+					navigator.mozGetUserMedia || 
+					navigator.getUserMedia;
+
+				MediaStreamTrack.getSources(function(sources){
+					var videoSources = [];
+					sources.forEach(function(source){
+						if(source.kind === 'video' && source.facing === 'environment') {
+							videoSources.push(source);	
+						}
+					});
+					videoSources.push(sources[0]); // mostly for testing on desktop, probably
+					// console.log(videoSources);
+
+					navigator.getUserMedia (
+						{
+							video: {
+								optional:[
+									{sourceId: videoSources[0].id},
+									{minWidth: 1920}, // get high res because we'll be zooming in
+								]
+							},
+							audio:false
+						},        
+						function(stream) {
+							video1.addEventListener('loadedmetadata', resizeVideos);
+
+							var url = window.URL || window.webkitURL;
+							video1.src = url ? url.createObjectURL(stream) : stream;
+							video2.src = video1.src;
+							// android needs to settle video src...?
+							setTimeout(function(){
+								video1.play();
+								video2.play();
+							}, 500);
+						},
+						function(error) {
+							console.error(error);
+						}
+					);
+
+				});
+			};
+
+			var resizeVideos = function(){
+				var sx = Math.max(0.5, video1.videoWidth/video1.videoHeight);
+				var width = sx * window.innerWidth * 0.5 * zoom;
+				var height = width * video1.videoWidth/video1.videoHeight * zoom;
+
+				console.log('resizeVideos', sx, width, height);
+				
+				[video1, video2].forEach(function(video){
+					video.style.width = width + 'px';
+					video.style.height = height + 'px';
+				});
+			};
+			window.addEventListener('resize', resizeVideos);
+
+			// controls
+			document.querySelector('#zoom').addEventListener('input', function(){
+				console.log(this.value);
+				zoom = this.value;
+				localStorage.setItem('zoom', this.value);
+				this.labels[0].querySelector('.value').innerHTML = this.value;
+				resizeVideos();
+			});
+			document.querySelector('#ipd').addEventListener('input', function(){
+				console.log(this.value);
+				video1.style.marginLeft = this.value;
+				localStorage.setItem('ipd', this.value);
+				this.labels[0].querySelector('.value').innerHTML = this.value;
+			});
+
+			var controls = document.querySelector('#controls');
+			var showControlsTimeout;
+			var showControls = function(){
+				console.log('showControls');
+				controls.style.opacity = 1;
+				clearTimeout(showControlsTimeout);
+				showControlsTimeout = setTimeout(function(){controls.style.opacity = 0;}, 4000);
+			};
+			document.body.addEventListener('mousemove', showControls);
+			document.body.addEventListener('touchstart', showControls);
+
+			// fullscreen. iOS no worky.
 			document.body.addEventListener('click', function(){
 				var elem = document.body;
 				if (elem.requestFullscreen) {
@@ -39,31 +201,6 @@
 					elem.webkitRequestFullscreen();
 				}
 			});
-
-			var video1 = document.querySelectorAll('video')[0];
-			var video2 = document.querySelectorAll('video')[1];
-
-			var setupWebcam = function(){
-				navigator.getUserMedia = 
-					navigator.webkitGetUserMedia || 
-					navigator.mozGetUserMedia || 
-					navigator.getUserMedia;
-
-				navigator.getUserMedia (
-					{
-						video:true,
-						audio:false
-					},        
-					function(stream) {
-						var url = window.URL || window.webkitURL;
-						video1.src = url ? url.createObjectURL(stream) : stream;
-						video1.play();
-						video2.src = video1.src;
-						video2.play();
-					},
-					function(error) { /* do something */ }
-				);
-			};
 
 			setupWebcam();
 
