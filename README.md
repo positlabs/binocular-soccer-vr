@@ -11,6 +11,8 @@ https://positlabs.github.io/binocular-soccer-vr/
 
 ## Controls
 
+Tapping on the screen will enter fullscreen mode. Tapping will also show app controls for a few seconds.
+
 Zoom: How far to zoom in.
 
 IPD: Offset one "eye" to fix double images. (May only be needed for large phones)
