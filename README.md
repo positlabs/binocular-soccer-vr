@@ -5,7 +5,7 @@ Use [Google Cardboard](https://www.google.com/get/cardboard/) to play Binocular 
 https://positlabs.github.io/binocular-soccer-vr/
 
 ## Inspiration: Japanese Binocular Soccer
-[![IMAGE ALT TEXT HERE](japanese-binocular-soccer.gif)](https://www.youtube.com/watch?v=8qh4VNuW_1w)
+[![IMAGE ALT TEXT HERE](japanese-binocular-soccer.gif)](https://www.youtube.com/watch?v=-rRK7vlBG8A)
 
 [Watch on YouTube](https://www.youtube.com/watch?v=8qh4VNuW_1w)
 
