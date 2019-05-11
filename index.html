@@ -110,12 +110,13 @@
 				navigator.getUserMedia
 
 			navigator.mediaDevices.enumerateDevices().then(function (sources) {
-				// console.log(sources)
+				console.log(sources)
 				var videoSources = sources.filter(function (source) {
-					return source.kind === 'video' && source.facing === 'environment'
+					// return source.kind === 'video' && source.facing === 'environment'
+					return source.kind === 'videoinput' && source.label.match('back') !== null
 				})
+				console.log(videoSources);
 				videoSources.push(sources[0]) // mostly for testing on desktop, probably
-				// console.log(videoSources);
 
 				navigator.getUserMedia({
 						video: {
