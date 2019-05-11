@@ -1,0 +1,12 @@
+{
+  "short_name": "Binocular Soccer VR",
+  "name": "Binocular Soccer VR",
+  "icons": [{
+    "src": "binoc-soccer-vr.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "landscape"
+}
