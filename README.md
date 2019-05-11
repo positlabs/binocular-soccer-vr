@@ -1,6 +1,6 @@
 # Binocular Soccer VR
 
-Use [Google Cardboard](https://www.google.com/get/cardboard/) to play Binocular Soccer! 
+Use [Google Cardboard](https://www.google.com/get/cardboard/) to play Binocular Soccer!
 
 https://positlabs.github.io/binocular-soccer-vr/
 

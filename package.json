@@ -1,0 +1,22 @@
+{
+  "name": "binocular-soccer-vr",
+  "version": "1.0.0",
+  "description": "Use [Google Cardboard](https://www.google.com/get/cardboard/) to play Binocular Soccer!",
+  "main": "index.html",
+  "scripts": {
+    "serve": "serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/positlabs/binocular-soccer-vr.git"
+  },
+  "author": "positlabs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/positlabs/binocular-soccer-vr/issues"
+  },
+  "homepage": "https://github.com/positlabs/binocular-soccer-vr#readme",
+  "devDependencies": {
+    "serve": "^11.0.0"
+  }
+}
